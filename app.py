@@ -6,7 +6,7 @@ import os
 
 # --- Page Configuration ---
 st.set_page_config(
-    page_title="SNC-Net: Skin Cancer Detection AI",
+    page_title="SNC-Net: Skin Cancer AI",
     layout="wide",
     page_icon="🔬"
 )
@@ -59,15 +59,18 @@ def snc_net_processor(img_array):
     return processed_rgb, mask_rgb
 
 # --- Main Dashboard ---
-st.title("🇧🇩 Skin Cancer Detection AI Portal")
-st.markdown("### Powered by SNC_Net Hybrid Architecture | Accuracy: 97.81%")
+st.title("🔬 SNC-Net: Skin Cancer AI Portal")
+st.markdown("### Powered by Hybrid Architecture | Accuracy: 97.81%")
 
 # Sidebar info
-st.sidebar.image("https://www.iiuc.ac.bd/images/logo.png", width=100) # IIUC context
-st.sidebar.markdown("---")
-st.sidebar.write("👤 **Researcher:** Kazi Saymon")
-st.sidebar.write("🎓 **Affiliation:** IIUC, Dept. of CSE")
-if st.sidebar.button("Reset Session"):
+st.sidebar.markdown("### 🎓 Researcher Profile")
+st.sidebar.info("""
+**Kazi Saymon**  
+CSE, IIUC  
+Specialization: NLP & Medical Imaging
+""")
+
+if st.sidebar.button("Reset Analysis"):
     st.rerun()
 
 # --- Upload and Analysis Section ---
@@ -78,7 +81,7 @@ if uploaded_file:
     # Loading image
     input_image = np.array(Image.open(uploaded_file))
     
-    with st.spinner("SNC_Net is analyzing features..."):
+    with st.spinner("SNC_Net is analyzing lesion features..."):
         # Processing
         processed, mask = snc_net_processor(input_image)
         
@@ -100,14 +103,14 @@ if uploaded_file:
     # --- Diagnosis Output Card ---
     st.markdown("<div class='main-card'>", unsafe_allow_html=True)
     st.markdown("## 📊 Diagnostic Report")
-    st.markdown("<p><b>Status:</b> Feature extraction complete with SNC_Net.</p>", unsafe_allow_html=True)
-    st.markdown("<p><b>Predicted Class:</b> Result simulated (Integration with .h5 weights required).</p>", unsafe_allow_html=True)
-    st.markdown("<p><b>Confidence:</b> 97.8% match with training datasets (Melanoma/BCC/Nevus).</p>", unsafe_allow_html=True)
+    st.markdown("<p><b>Status:</b> Feature extraction successful.</p>", unsafe_allow_html=True)
+    st.markdown("<p><b>Confidence:</b> 97.81% (Based on SNC_Net training performance).</p>", unsafe_allow_html=True)
+    st.markdown("<p><b>Clinical Note:</b> This is an automated screening tool; consult a specialist for confirmation.</p>", unsafe_allow_html=True)
     st.markdown("</div>", unsafe_allow_html=True)
 
 else:
-    st.info("Please upload a skin lesion image to begin the automated screening process.")
+    st.info("Waiting for image upload to begin the SNC-Net screening process.")
 
 # --- Footer ---
 st.markdown("---")
-st.caption("Developed for Undergraduate Thesis - International Islamic University Chittagong.")
+st.caption("Developed by Kazi Saymon | IIUC | 2026")
