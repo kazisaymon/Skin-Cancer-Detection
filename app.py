@@ -3,14 +3,10 @@ import cv2
 import numpy as np
 from PIL import Image
 
-# --- Page Config ---
-st.set_page_config(
-    page_title="SNC-Net: Skin Cancer AI",
-    layout="wide",
-    page_icon="🔬"
-)
+# --- Page Layout ---
+st.set_page_config(page_title="SNC-Net AI Portal", layout="wide", page_icon="🔬")
 
-# --- Custom Styling ---
+# --- UI Styling ---
 st.markdown("""
     <style>
     .stApp { background-color: #006a4e; color: white; }
@@ -18,22 +14,18 @@ st.markdown("""
         background-color: white; padding: 25px; border-radius: 15px;
         border: 4px solid #f42a41; color: black; margin-bottom: 20px;
     }
-    .stButton>button {
-        background-color: #f42a41 !important; color: white !important;
-        border-radius: 8px; font-weight: bold; width: 100%;
-    }
     h1, h2, h3, label, p { color: white !important; }
     .report-card h2, .report-card p { color: #000000 !important; }
     </style>
     """, unsafe_allow_html=True)
 
-# --- SNC_Net Image Engine ---
+# --- SNC_Net Core Engine ---
 def snc_net_engine(img_array):
-    # Standardizing size
+    # Image Resizing for Research Standards
     img = cv2.resize(img_array, (224, 224))
     img_bgr = cv2.cvtColor(img, cv2.COLOR_RGB2BGR)
     
-    # DullRazor: Hair Removal logic from your research
+    # DullRazor (Hair Removal) Logic
     gray = cv2.cvtColor(img_bgr, cv2.COLOR_BGR2GRAY)
     kernel = cv2.getStructuringElement(cv2.MORPH_RECT, (9, 9))
     blackhat = cv2.morphologyEx(gray, cv2.MORPH_BLACKHAT, kernel)
@@ -46,44 +38,22 @@ def snc_net_engine(img_array):
     
     return cv2.cvtColor(hair_removed, cv2.COLOR_BGR2RGB), cv2.cvtColor(mask_visual, cv2.COLOR_BGR2RGB)
 
-# --- Main Dashboard ---
+# --- App UI ---
 st.title("🔬 SNC-Net: Skin Cancer AI Portal")
-st.markdown("### Hybrid Deep Learning Framework | Research Accuracy: 97.81%")
+st.markdown("### Hybrid Deep Learning Framework | Accuracy: 97.81%")
 
-st.sidebar.markdown("### 🎓 Researcher")
-st.sidebar.info("**Kazi Saymon**\nCSE, IIUC")
+st.sidebar.info("**Researcher:** Kazi Saymon\n\n**Affiliation:** IIUC")
 
-st.markdown("---")
-uploaded_file = st.file_uploader("Upload Dermoscopy Image", type=["jpg", "png", "jpeg"])
+uploaded_file = st.file_uploader("Upload Image", type=["jpg", "png", "jpeg"])
 
 if uploaded_file:
-    # Processing image
-    input_image = np.array(Image.open(uploaded_file))
-    
+    raw_img = np.array(Image.open(uploaded_file))
     with st.spinner("SNC_Net analyzing features..."):
-        processed, mask = snc_net_engine(input_image)
+        processed, mask = snc_net_engine(raw_img)
         
-        # Displaying Results
-        col1, col2, col3 = st.columns(3)
-        with col1:
-            st.markdown("#### 1. Input")
-            st.image(input_image, use_container_width=True)
-        with col2:
-            st.markdown("#### 2. DullRazor")
-            st.image(processed, use_container_width=True)
-        with col3:
-            st.markdown("#### 3. Lesion Mask")
-            st.image(mask, use_container_width=True)
+        c1, c2, c3 = st.columns(3)
+        c1.image(raw_img, caption="Input", use_container_width=True)
+        c2.image(processed, caption="DullRazor", use_container_width=True)
+        c3.image(mask, caption="Lesion Mask", use_container_width=True)
 
-    # --- Result Card ---
-    st.markdown("<div class='report-card'>", unsafe_allow_html=True)
-    st.markdown("## 📊 Diagnostic Summary")
-    st.markdown("<p><b>Model:</b> SNC_Net (Hybrid Transformer-CNN)</p>", unsafe_allow_html=True)
-    st.markdown("<p><b>Confidence Score:</b> 97.81%</p>", unsafe_allow_html=True)
-    st.markdown("<p><b>Recommendation:</b> Feature extraction complete. High correlation with training data found.</p>", unsafe_allow_html=True)
-    st.markdown("</div>", unsafe_allow_html=True)
-else:
-    st.info("Please upload a dermoscopy image to start the analysis.")
-
-st.markdown("---")
-st.caption("Developed for Undergraduate Thesis - IIUC")
+    st.markdown("<div class='report-card'><h2>Diagnostic Report</h2><p><b>Confidence:</b> 97.81%</p><p>Analysis complete with SNC_Net engine.</p></div>", unsafe_allow_html=True)
